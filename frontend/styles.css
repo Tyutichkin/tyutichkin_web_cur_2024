@@ -1,0 +1,271 @@
+body {
+    font-family: Arial, sans-serif;
+}
+.container {
+    width: 100%;
+    margin: 0 auto;
+}
+.center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+h1 {
+    text-align: center;
+}
+button {
+    cursor: pointer;
+    transition: color 0.5s, background-color 0.5s;
+}
+
+.nav-buttons {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 20px;
+    background: #ddd 1px 1px;
+}
+
+.nav-buttons a {
+    border-radius: 7px;
+    border: 1px solid black;
+    background-color: black;
+    color: white;
+    margin: 0 10px;
+    padding: 10px 20px;
+    text-decoration: none;
+    display: inline-block;
+    transition: background-color 0.4s, color 0.4s;
+}
+
+.nav-buttons a:hover {
+    background-color: white;
+    color: black;
+}
+
+.filters {
+    display: flex;
+    justify-content: flex-start;
+}
+.filter-group {
+    padding: 20px 5px;
+    display: block;
+}
+.filter-group p {
+    display: grid;
+    justify-content: space-between;
+    border: 1px solid black;
+    padding: 5px 10px 1px 5px;
+}
+
+.filter-group input {
+    /* width: 150px; */
+    padding: 10px 100px 10px 0px;
+    margin: 0 0 10px;
+}
+.action-buttons {
+    margin: 20px 0;
+}
+.action-buttons button {
+    border-radius: 7px;
+    background-color: black;
+    width: 100%;
+    color: white;
+    padding: 10px 20px 20px 0px;
+}
+div.auth {
+    width: 10%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 10px 0px;
+}
+div.search {
+    width: 100%;
+    display: flex;
+    margin: 10px 0px;
+}
+.search input {
+    flex: 1;
+    box-sizing: border-box;
+    border-radius: 7px;
+    padding: 10px 0px;
+}
+.search button {
+    border-radius: 7px;
+    padding: 10px;
+    margin-left: 10px;
+    background-color: black;
+    color: white;
+    cursor: pointer;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+th,
+td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+th {
+    background-color: #f2f2f2;
+    text-align: left;
+}
+.actions {
+    border: 1px solid black;
+    display: inline-flex;
+    /* justify-content: fl; */
+    width: 100%;
+}
+.actions button {
+    margin: 0 5px;
+    padding: 5px 10px;
+}
+.delete-btn {
+    background-color: salmon;
+    color: white;
+}
+.download-btn {
+    background-color: cadetblue;
+    color: white;
+}
+.edit-btn {
+    background-color: cornflowerblue;
+    color: white;
+}
+.add-btn {
+    background-color: green;
+    color: white;
+    display: block;
+    margin: 5px 0px 0px 0px;
+    padding: 10px 20px;
+    border-radius: 7px;
+}
+div {
+    display: inline-block;
+}
+div.input-group {
+    /* border: 1px solid black; */
+    display: flex;
+    width: 100%;
+}
+form.input-group {
+    display: flex;
+    flex: 1;
+    margin: 0px;
+}
+
+.input-group input {
+    flex: 1;
+    border-radius: 7px;
+    padding: 10px 0px;
+    margin-left: 10px;
+}
+
+.input-group button {
+    background-color: black;
+    color: white;
+    border-radius: 7px;
+    padding: 10px;
+    margin: 0px 5px;
+}
+
+.action-btns button {
+    padding: 3px 5px;
+}
+
+.modal {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 99999;
+    background-color: rgba(0, 0, 0, 0.3);
+    display: grid;
+    align-items: center;
+    justify-content: center;
+    overflow-y: auto;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.4s, visibility 0.4s;
+}
+
+.modal__box {
+    position: relative;
+    max-width: 500px;
+    padding: 30px;
+    z-index: 1;
+    margin: 30px 15px;
+    background-color: white;
+    box-shadow: 0px 0px 11px 4px rgba(0, 0, 0, 0.1);
+    transform: scale(0);
+    transition: transform 0.8s;
+    display: flex;
+    flex-direction: column;
+    border-radius: 7px;
+}
+
+.modal.open {
+    visibility: visible;
+    opacity: 1;
+}
+
+/*  Если у modal появится класс open, то эти настройки применется на modal__box */
+.modal.open .modal__box {
+    transform: scale(1);
+}
+
+.modal__close-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    border: none;
+    background-color: transparent;
+    padding: 5px;
+    cursor: pointer;
+}
+
+.modal__close-btn:hover {
+    color: tomato;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    /* margin-top: 0px; Отступ между меткой и полем ввода */
+    padding: 10px 0px 0px;
+}
+
+.form-group input {
+    min-width: 300px;
+    padding: 10px;
+    border-radius: 7px;
+    border: 1px solid #ccc;
+}
+
+.form-group select {
+    min-width: 300px;
+    padding: 10px;
+    border-radius: 7px;
+    border: 1px solid #ccc;
+}
+
+.modal_action_button {
+    background-color: black;
+    color: white;
+    margin-top: 10px;
+    padding: 10px 0px;
+    border-radius: 7px;
+}
+
+button:hover {
+    color: rgb(0, 0, 0);
+    background-color: white;
+}

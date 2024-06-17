@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Товары</title>
+        <link rel="stylesheet" href="styles.css" />
+    </head>
+    <body>
+        <div class="container">
+            <div class="nav-buttons">
+                <a href="goods_admin.html">Товары</a>
+                <a href="users_admin.html">Пользователи</a>
+                <a href="stocks_admin.html">Склады</a>
+            </div>
+
+            <h1>СТРАНИЦА С ТОВАРАМИ</h1>
+            <div class="actions">
+                <div class="filters">
+                    <div class="filter-group">
+                        <p>
+                            min Цена<input
+                                type="text"
+                                id="good-min-price-input"
+                                placeholder="min Цена"
+                            />
+                        </p>
+                        <p>
+                            max Цена<input
+                                type="text"
+                                id="good-max-price-input"
+                                placeholder="max Цена"
+                            />
+                        </p>
+                    </div>
+                    <div class="filter-group">
+                        <p>
+                            min Кол-во
+                            <input
+                                type="text"
+                                id="good-min-count-input"
+                                placeholder="min Кол-во"
+                            />
+                        </p>
+                        <p>
+                            max Кол-во<input
+                                type="text"
+                                id="good-max-count-input"
+                                placeholder="max Кол-во"
+                            />
+                        </p>
+                    </div>
+                </div>
+                <div class="action-buttons">
+                    <p>
+                        <button onclick="addGood()">
+                            Добавить новый товар
+                        </button>
+                    </p>
+                    <p>
+                        <button onclick="addGoodToStock()">
+                            Добавить товар на склад
+                        </button>
+                    </p>
+                    <p>
+                        <button onclick="editGoodToStock()">
+                            Изменить кол-во товара на складе
+                        </button>
+                    </p>
+                    <p>
+                        <button onclick="triggerFileInput()">
+                            Импортировать товар из файла JSON
+                        </button>
+                    </p>
+                    <input
+                        type="file"
+                        id="json-file-input"
+                        style="display: none"
+                        onchange="importGoodFromJSON(event)"
+                    />
+                </div>
+            </div>
+            <div class="search">
+                <input
+                    type="text"
+                    id="good-name-filter-input"
+                    placeholder="Фильтр по названию товара"
+                />
+                <button onclick="searchGoods()">ПОИСК</button>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Название</th>
+                        <th>Описание</th>
+                        <th>Номер склада</th>
+                        <th>Кем добавлен</th>
+                        <th>
+                            Цена
+                            <button onclick="sortGoodsByPrice()">↕️</button>
+                        </th>
+                        <th>
+                            Кол-во
+                            <button onclick="sortGoodsByCount()">↕️</button>
+                        </th>
+                        <th>Действия</th>
+                    </tr>
+                </thead>
+                <tbody id="goods-table"></tbody>
+            </table>
+        </div>
+        <!-- модальное окно -->
+        <div class="modal" id="add-goods-modal">
+            <div class="modal__box">
+                <button class="modal__close-btn" onclick="closeAddGoodModal()">
+                    X
+                </button>
+
+                <h3>ДОБАВИТЬ ТОВАР</h3>
+                <div class="form-group">
+                    <label for="name">Название</label>
+                    <input type="text" id="good-name" placeholder="название" />
+                </div>
+                <div class="form-group">
+                    <label for="description">Описание</label>
+                    <input
+                        type="text"
+                        id="good-description"
+                        placeholder="описание"
+                    />
+                </div>
+                <div class="form-group">
+                    <label for="price">Цена</label>
+                    <input type="text" id="good-price" placeholder="цена" />
+                </div>
+                <button class="modal_action_button" onclick="addGoodModal()">
+                    ДОБАВИТЬ ТОВАР
+                </button>
+            </div>
+        </div>
+        <div class="modal" id="edit-goods-modal">
+            <div class="modal__box">
+                <button class="modal__close-btn" onclick="closeEditGoodModal()">
+                    X
+                </button>
+
+                <h3>ИЗМЕНИТЬ ТОВАР</h3>
+                <div class="form-group">
+                    <label for="name">Название</label>
+                    <input
+                        type="text"
+                        id="edit-good-name"
+                        placeholder="название"
+                    />
+                </div>
+                <div class="form-group">
+                    <label for="description">Описание</label>
+                    <input
+                        type="text"
+                        id="edit-good-description"
+                        placeholder="описание"
+                    />
+                </div>
+                <div class="form-group">
+                    <label for="price">Цена</label>
+                    <input
+                        type="text"
+                        id="edit-good-price"
+                        placeholder="цена"
+                    />
+                </div>
+                <button class="modal_action_button" onclick="editGoodModal()">
+                    ИЗМЕНИТЬ ТОВАР
+                </button>
+            </div>
+        </div>
+        <div class="modal" id="add-good-to-stock-modal">
+            <div class="modal__box">
+                <button
+                    class="modal__close-btn"
+                    onclick="closeAddGoodToStockModal()"
+                >
+                    X
+                </button>
+
+                <h3>ДОБАВИТЬ ТОВАР НА СКЛАД</h3>
+                <div class="form-group">
+                    <label for="Название">ID товара</label>
+                    <select
+                        name="good-id"
+                        id="add-good-to-stock-good-id-select"
+                    ></select>
+                </div>
+                <div class="form-group">
+                    <label for="Описание">ID склада</label>
+                    <select
+                        name="stock-id"
+                        id="add-good-to-stock-stock-id-select"
+                    ></select>
+                </div>
+                <div class="form-group">
+                    <label for="кол-во">Кол-во</label>
+                    <input
+                        type="text"
+                        id="add-good-to-stock-count"
+                        placeholder="кол-во"
+                    />
+                </div>
+                <button
+                    class="modal_action_button"
+                    onclick="addGoodToStockModal()"
+                >
+                    ДОБАВИТЬ
+                </button>
+            </div>
+        </div>
+        <div class="modal" id="edit-good-to-stock-modal">
+            <div class="modal__box">
+                <button
+                    class="modal__close-btn"
+                    onclick="closeEditGoodToStockModal()"
+                >
+                    X
+                </button>
+
+                <h3>ИЗМЕНИТЬ КОЛ-ВО ТОВАРА НА СКЛАДЕ</h3>
+                <div class="form-group">
+                    <label for="Название">ID товара</label>
+                    <select
+                        name="good-id"
+                        id="edit-good-to-stock-good-id-select"
+                    ></select>
+                </div>
+                <div class="form-group">
+                    <label for="Описание">ID склада</label>
+                    <select
+                        name="stock-id"
+                        id="edit-good-to-stock-stock-id-select"
+                    ></select>
+                </div>
+                <div class="form-group">
+                    <label for="кол-во">Кол-во</label>
+                    <input
+                        type="text"
+                        id="edit-good-to-stock-count"
+                        placeholder="кол-во"
+                    />
+                </div>
+                <button
+                    class="modal_action_button"
+                    onclick="editGoodToStockModal()"
+                >
+                    ИЗМЕНИТЬ
+                </button>
+            </div>
+        </div>
+        <script src="scripts.js"></script>
+    </body>
+</html>

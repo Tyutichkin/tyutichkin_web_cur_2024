@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Склады</title>
+        <link rel="stylesheet" href="styles.css" />
+    </head>
+    <body>
+        <div class="container">
+            <div class="nav-buttons">
+                <a href="goods_admin.html">Товары</a>
+                <a href="users_admin.html">Пользователи</a>
+                <a href="stocks_admin.html">Склады</a>
+            </div>
+
+            <h1>СТРАНИЦА С СКЛАДАМИ</h1>
+            <div class="search">
+                <input
+                    type="text"
+                    id="stock-search-address"
+                    placeholder="Поиск по адресу"
+                />
+                <button onclick="searchStocks()">Поиск</button>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Адрес</th>
+                        <th>Действия</th>
+                    </tr>
+                </thead>
+                <tbody id="stocks-table">
+                    <!-- Stocks will be loaded here dynamically -->
+                </tbody>
+            </table>
+        </div>
+        <button class="add-btn" onclick="addStock()">Добавить склад</button>
+        <div class="modal" id="add-stock-modal">
+            <div class="modal__box">
+                <button class="modal__close-btn" onclick="closeAddStockModal()">
+                    X
+                </button>
+
+                <h3>ДОБАВИТЬ СКЛАД</h3>
+                <div class="form-group">
+                    <label for="address">Адрес</label>
+                    <input
+                        type="text"
+                        id="add-stock-address"
+                        placeholder="адрес"
+                    />
+                </div>
+                <button class="modal_action_button" onclick="addStockModal()">
+                    ДОАБВИТЬ
+                </button>
+            </div>
+        </div>
+        <div class="modal" id="edit-stock-modal">
+            <div class="modal__box">
+                <button
+                    class="modal__close-btn"
+                    onclick="closeEditStockModal()"
+                >
+                    X
+                </button>
+
+                <h3>ИЗМЕНИТЬ ИНФОРМАЦИЮ О СКЛАДЕ</h3>
+                <div class="form-group">
+                    <label for="address">Адрес</label>
+                    <input
+                        type="text"
+                        id="edit-stock-address"
+                        placeholder="адрес"
+                    />
+                </div>
+                <button class="modal_action_button" onclick="editStockModal()">
+                    ИЗМЕНИТЬ
+                </button>
+            </div>
+        </div>
+        <script src="scripts.js"></script>
+    </body>
+</html>
