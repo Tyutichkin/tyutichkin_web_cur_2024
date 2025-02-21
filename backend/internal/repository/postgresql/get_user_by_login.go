@@ -1,4 +1,4 @@
-package sqlite
+package postgresql
 
 import (
 	"context"
@@ -10,7 +10,7 @@ func (r *Repository) GetUserByLogin(ctx context.Context, login string) (user mod
 		SELECT id,
 		       fullname,
 		       login
-		FROM main.user
+		FROM public.user
 		WHERE login = $1;
 	`
 	err = r.db.QueryRow(query, login).Scan(

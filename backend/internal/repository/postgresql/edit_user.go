@@ -1,4 +1,4 @@
-package sqlite
+package postgresql
 
 import (
 	"context"
@@ -7,7 +7,7 @@ import (
 
 func (r *Repository) EditUser(ctx context.Context, user models.User) (err error) {
 	var query = `
-		UPDATE main.user SET
+		UPDATE public.user SET
 				fullname = ?,
 				login = ?,
 				password = ?,

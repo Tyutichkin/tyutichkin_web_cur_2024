@@ -1,4 +1,4 @@
-package sqlite
+package postgresql
 
 import (
 	"context"
@@ -9,7 +9,7 @@ func (r *Repository) SearchStocks(ctx context.Context, searchRequest models.Sear
 	var query = `
 		SELECT id,
 		       adress
-		FROM main.stock s
+		FROM public.stock s
 		WHERE ($1 = '' OR (adress like concat_ws('%', $1, '%')))
 		ORDER BY id;
 	`

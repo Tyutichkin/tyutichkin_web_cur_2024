@@ -1,4 +1,4 @@
-package sqlite
+package postgresql
 
 import (
 	"context"
@@ -15,9 +15,9 @@ func (r *Repository) SearchGoods(ctx context.Context, searchRequest models.Searc
 		       coalesce(u.fullname, ''),
 		       coalesce(gs.stock_id, 0),
 		       coalesce(gs.goods_count, 0)
-		FROM main.goods g
-		LEFT JOIN main.user u ON u.id = g.created_by_user_id
-		LEFT JOIN main.goods_stock gs on gs.goods_id = g.id
+		FROM public.goods g
+		LEFT JOIN public.user u ON u.id = g.created_by_user_id
+		LEFT JOIN public.goods_stock gs on gs.goods_id = g.id
 		WHERE ($1 = '' OR (name like concat_ws('%', $1, '%')))
 		AND ($2 = 0 OR (price >= $2))
 		AND ($3 = 0 OR (price <= $3))

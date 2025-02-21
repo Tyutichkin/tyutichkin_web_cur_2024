@@ -1,11 +1,11 @@
-package sqlite
+package postgresql
 
 import (
 	"context"
 	"main/internal/models"
 )
 
-func (r *Repository) GetAllStocks(ctx context.Context) (stocks []models.Stock, err error) {
+func (r *Repository) GetAllUsers(ctx context.Context) (users []models.User, err error) {
 	tx, err := r.db.BeginTx(ctx, nil)
 	defer tx.Rollback()
 	if err != nil {
@@ -13,9 +13,12 @@ func (r *Repository) GetAllStocks(ctx context.Context) (stocks []models.Stock, e
 	}
 	var query = `
 		SELECT id,
-		       adress
-		FROM main.stock s
-		ORDER BY id
+		       fullname,
+		       login,
+		       password,
+		       is_admin
+		FROM public.user
+		ORDER BY id;
 	`
 	rows, err := tx.Query(query)
 	defer rows.Close()
@@ -24,18 +27,21 @@ func (r *Repository) GetAllStocks(ctx context.Context) (stocks []models.Stock, e
 	}
 
 	for rows.Next() {
-		var stock models.Stock
+		var user models.User
 		err := rows.Scan(
-			&stock.ID,
-			&stock.Address,
+			&user.ID,
+			&user.FullName,
+			&user.Login,
+			&user.Password,
+			&user.IsAdmin,
 		)
 		if err != nil {
 			return nil, err
 		}
-		stocks = append(stocks, stock)
+		users = append(users, user)
 	}
 	if err = tx.Commit(); err != nil {
 		return nil, err
 	}
-	return stocks, nil
+	return users, nil
 }

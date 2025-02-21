@@ -5,10 +5,11 @@ import (
 	"fmt"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	_ "github.com/mattn/go-sqlite3"
+	_ "github.com/lib/pq"
 	"main/internal/middleware"
-	"main/internal/repository/sqlite"
+	"main/internal/repository/postgresql"
 	"main/internal/service"
+	"os"
 	"time"
 )
 
@@ -19,11 +20,15 @@ var (
 
 func main() {
 	err := initDatabase()
-	defer DB.Close()
+	defer func(db *sql.DB) {
+		if db != nil {
+			db.Close()
+		}
+	}(DB)
 	if err != nil {
 		panic(fmt.Sprintf("initDatabase err: %w", err))
 	}
-	repo := sqlite.NewRepository(DB)
+	repo := postgresql.NewRepository(DB)
 	svc := service.NewService(repo)
 
 	router, err := initApi(svc)
@@ -95,9 +100,23 @@ func initDatabase() error {
 }
 
 func connectDatabase() (*sql.DB, error) {
-	db, err := sql.Open("sqlite3", "../db.db")
-	if err != nil {
-		return nil, err
+	// Подключение через переменные окружения
+	dbURL := os.Getenv("DATABASE_URL")
+	if dbURL == "" {
+		return nil, fmt.Errorf("failed to get DATABASE_URL environment variable")
 	}
+
+	db, err := sql.Open("postgres", dbURL)
+	if err != nil {
+		return nil, fmt.Errorf("failed to connect to database: %w", err)
+	}
+
+	// Проверка соединения
+	err = db.Ping()
+	if err != nil {
+		return nil, fmt.Errorf("database is not responding: %w", err)
+	}
+
+	fmt.Println("Connected to PostgreSQL!")
 	return db, nil
 }

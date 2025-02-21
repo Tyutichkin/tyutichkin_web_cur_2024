@@ -1,4 +1,4 @@
-package sqlite
+package postgresql
 
 import (
 	"context"
@@ -8,10 +8,10 @@ import (
 
 func (r *Repository) DeleteStockByID(ctx context.Context, stock models.Stock) (err error) {
 	var query = `
-		DELETE FROM main.goods_stock
+		DELETE FROM public.goods_stock
 		WHERE stock_id = ?;
 
-		DELETE FROM main.stock
+		DELETE FROM public.stock
 		WHERE id = ?;
 	`
 	_, err = r.db.Exec(query, stock.ID, stock.ID)

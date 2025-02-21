@@ -1,4 +1,4 @@
-package sqlite
+package postgresql
 
 import (
 	"context"
@@ -19,9 +19,9 @@ func (r *Repository) GetAllGoods(ctx context.Context) (goods []models.Good, err 
 		       coalesce(u.fullname, ''),
 		       coalesce(gs.stock_id, 0),
 		       coalesce(gs.goods_count, 0)
-		FROM main.goods g
-		LEFT JOIN main.user u ON u.id = g.created_by_user_id
-		LEFT JOIN main.goods_stock gs on gs.goods_id = g.id
+		FROM public.goods g
+		LEFT JOIN public.user u ON u.id = g.created_by_user_id
+		LEFT JOIN public.goods_stock gs on gs.goods_id = g.id
 		ORDER BY price, gs.goods_count
 	`
 	rows, err := tx.Query(query)

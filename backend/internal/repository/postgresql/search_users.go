@@ -1,4 +1,4 @@
-package sqlite
+package postgresql
 
 import (
 	"context"
@@ -12,7 +12,7 @@ func (r *Repository) SearchUsers(ctx context.Context, searchRequest models.Searc
 		       login,
 		       password,
 		       is_admin
-		FROM main.user
+		FROM public.user
 		WHERE ($1 = '' OR (fullname like concat_ws('%', $1, '%')))
 		AND ($2 = '' OR (login like concat_ws('%', $2, '%')))
 		ORDER BY id;

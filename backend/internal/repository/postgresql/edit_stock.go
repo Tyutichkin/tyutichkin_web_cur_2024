@@ -1,4 +1,4 @@
-package sqlite
+package postgresql
 
 import (
 	"context"
@@ -7,7 +7,7 @@ import (
 
 func (r *Repository) EditStock(ctx context.Context, stock models.Stock) (err error) {
 	var query = `
-		UPDATE main.stock SET
+		UPDATE public.stock SET
 				adress = ?
 		WHERE id = ?;
 	`

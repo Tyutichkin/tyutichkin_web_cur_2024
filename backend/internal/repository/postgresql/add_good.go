@@ -1,4 +1,4 @@
-package sqlite
+package postgresql
 
 import (
 	"context"
@@ -8,7 +8,7 @@ import (
 
 func (r *Repository) AddGood(ctx context.Context, good models.Good) (err error) {
 	var query = `
-		INSERT INTO main.goods(name, description, price, created_by_user_id, created_at, updated_at)
+		INSERT INTO public.goods(name, description, price, created_by_user_id, created_at, updated_at)
 		VALUES ($1, $2, $3, $4, $5, $6)
 	`
 	_, err = r.db.Exec(query,

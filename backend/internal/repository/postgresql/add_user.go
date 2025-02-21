@@ -1,4 +1,4 @@
-package sqlite
+package postgresql
 
 import (
 	"context"
@@ -7,7 +7,7 @@ import (
 
 func (r *Repository) AddUser(ctx context.Context, user models.User) (err error) {
 	var query = `
-		INSERT INTO main.user(fullname, login, password, is_admin)
+		INSERT INTO public.user(fullname, login, password, is_admin)
 		VALUES ($1, $2, $3, $4)
 	`
 	_, err = r.db.Exec(query, user.FullName, user.Login, user.Password, user.IsAdmin)

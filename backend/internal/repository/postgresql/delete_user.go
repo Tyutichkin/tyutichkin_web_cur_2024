@@ -1,4 +1,4 @@
-package sqlite
+package postgresql
 
 import (
 	"context"
@@ -7,7 +7,7 @@ import (
 
 func (r *Repository) DeleteUserByID(ctx context.Context, user models.User) (err error) {
 	var query = `
-		DELETE FROM main.user
+		DELETE FROM public.user
 		WHERE id = $1;
 	`
 	_, err = r.db.Exec(query, user.ID)
