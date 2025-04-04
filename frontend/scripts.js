@@ -4,6 +4,9 @@ let currentUserId = null;
 let currentStockId = null;
 let currentIsPriceDesc = false;
 let currentIsCountDesc = false;
+const host = window.location.hostname || "localhost";  // Автоматически берет хост из текущего URL
+const frontPort = "5500";
+const backendPort = "8083"
 
 function addGood() {
     document.getElementById("add-goods-modal").classList.add("open");
@@ -22,7 +25,7 @@ async function addGoodModal() {
 
     try {
         const response = await authenticatedFetch(
-            "http://localhost:8083/api/v1/good",
+            `http://${host}:${backendPort}/api/v1/good`,
             {
                 method: "POST",
                 headers: {
@@ -53,7 +56,7 @@ async function addStockModal() {
 
     try {
         const response = await authenticatedFetch(
-            "http://localhost:8083/api/v1/stock",
+            `http://${host}:${backendPort}/api/v1/stock`,
             {
                 method: "POST",
                 headers: {
@@ -118,7 +121,7 @@ async function editGoodModal() {
 
     try {
         const response = await authenticatedFetch(
-            "http://localhost:8083/api/v1/good",
+            `http://${host}:${backendPort}/api/v1/good`,
             {
                 method: "PUT",
                 headers: {
@@ -162,7 +165,7 @@ async function addUserModal() {
 
     try {
         const response = await authenticatedFetch(
-            "http://localhost:8083/api/v1/user",
+            `http://${host}:${backendPort}/api/v1/user`,
             {
                 method: "POST",
                 headers: {
@@ -208,7 +211,7 @@ async function editUserModal() {
 
     try {
         const response = await authenticatedFetch(
-            "http://localhost:8083/api/v1/user",
+            `http://${host}:${backendPort}/api/v1/user`,
             {
                 method: "PUT",
                 headers: {
@@ -233,7 +236,7 @@ async function editUserModal() {
 async function deleteUser(userID) {
     try {
         const response = await authenticatedFetch(
-            `http://localhost:8083/api/v1/user/${userID}`,
+            `http://${host}:${backendPort}/api/v1/user/${userID}`,
             {
                 method: "DELETE",
                 headers: {
@@ -281,7 +284,7 @@ async function addGoodToStockModal() {
 
     try {
         const response = await authenticatedFetch(
-            "http://localhost:8083/api/v1/good_stock",
+            `http://${host}:${backendPort}/api/v1/good_stock`,
             {
                 method: "POST",
                 headers: {
@@ -333,7 +336,7 @@ async function editGoodToStockModal() {
 
     try {
         const response = await authenticatedFetch(
-            "http://localhost:8083/api/v1/good_stock",
+            `http://${host}:${backendPort}/api/v1/good_stock`,
             {
                 method: "PUT",
                 headers: {
@@ -365,7 +368,7 @@ async function editGoodToStockForUserModal() {
 
     try {
         const response = await authenticatedFetch(
-            "http://localhost:8083/api/v1/good_stock",
+            `http://${host}:${backendPort}/api/v1/good_stock`,
             {
                 method: "PUT",
                 headers: {
@@ -413,7 +416,7 @@ async function editStockModal() {
 
     try {
         const response = await authenticatedFetch(
-            "http://localhost:8083/api/v1/stock",
+            `http://${host}:${backendPort}/api/v1/stock`,
             {
                 method: "PUT",
                 headers: {
@@ -438,7 +441,7 @@ async function editStockModal() {
 async function deleteStock(stockID) {
     try {
         const response = await authenticatedFetch(
-            `http://localhost:8083/api/v1/stock/${stockID}`,
+            `http://${host}:${backendPort}/api/v1/stock/${stockID}`,
             {
                 method: "DELETE",
                 headers: {
@@ -470,7 +473,7 @@ function sortGoodsByCount() {
 async function deleteGood(goodID) {
     try {
         const response = await authenticatedFetch(
-            `http://localhost:8083/api/v1/good/${goodID}`,
+            `http://${host}:${backendPort}/api/v1/good/${goodID}`,
             {
                 method: "DELETE",
                 headers: {
@@ -492,7 +495,7 @@ async function deleteGood(goodID) {
 async function loadGoods() {
     try {
         const response = await authenticatedFetch(
-            "http://localhost:8083/api/v1/good/all"
+            `http://${host}:${backendPort}/api/v1/good/all`
         );
 
         const data = await response.json();
@@ -540,7 +543,7 @@ async function loadGoods() {
 async function loadGoodsForUser() {
     try {
         const response = await authenticatedFetch(
-            "http://localhost:8083/api/v1/good/all"
+            `http://${host}:${backendPort}/api/v1/good/all`
         );
         const data = await response.json();
 
@@ -585,7 +588,7 @@ async function loadGoodsForUser() {
 async function loadUsers() {
     try {
         const response = await authenticatedFetch(
-            "http://localhost:8083/api/v1/user/all"
+            `http://${host}:${backendPort}/api/v1/user/all`
         );
         const data = await response.json();
 
@@ -623,7 +626,7 @@ async function loadUsers() {
 async function loadStocks() {
     try {
         const response = await authenticatedFetch(
-            "http://localhost:8083/api/v1/stock/all"
+            `http://${host}:${backendPort}/api/v1/stock/all`
         );
         const data = await response.json();
 
@@ -659,7 +662,7 @@ async function loadStocks() {
 async function loadStocksID() {
     try {
         const response = await authenticatedFetch(
-            "http://localhost:8083/api/v1/stock/all"
+            `http://${host}:${backendPort}/api/v1/stock/all`
         );
         const data = await response.json();
 
@@ -697,7 +700,7 @@ async function loadStocksID() {
 async function loadGoodsID() {
     try {
         const response = await authenticatedFetch(
-            "http://localhost:8083/api/v1/good/all"
+            `http://${host}:${backendPort}/api/v1/good/all`
         );
         const data = await response.json();
 
@@ -766,7 +769,7 @@ async function searchGoods() {
 
     try {
         const response = await authenticatedFetch(
-            "http://localhost:8083/api/v1/search/good",
+            `http://${host}:${backendPort}/api/v1/search/good`,
             {
                 method: "POST",
                 headers: {
@@ -856,7 +859,7 @@ async function searchUsers() {
 
     try {
         const response = await fetch(
-            "http://localhost:8083/api/v1/search/user",
+            `http://${host}:${backendPort}/api/v1/search/user`,
             {
                 method: "POST",
                 headers: {
@@ -908,7 +911,7 @@ async function searchStocks() {
 
     try {
         const response = await fetch(
-            "http://localhost:8083/api/v1/search/stock",
+            `http://${host}:${backendPort}/api/v1/search/stock`,
             {
                 method: "POST",
                 headers: {
@@ -960,7 +963,7 @@ async function importGoodFromJSON(event) {
 
         try {
             const response = await authenticatedFetch(
-                "http://localhost:8083/api/v1/good/upload",
+                `http://${host}:${backendPort}/api/v1/good/upload`,
                 {
                     method: "POST",
                     body: formData,
@@ -985,7 +988,7 @@ async function importGoodFromJSON(event) {
 async function downloadGood(id) {
     try {
         const response = await authenticatedFetch(
-            `http://localhost:8083/api/v1/good/download/${id}`
+            `http://${host}:${backendPort}/api/v1/good/download/${id}`
         );
         if (!response.ok) {
             throw new Error(
@@ -1024,7 +1027,7 @@ async function loginUser() {
 
     try {
         const response = await fetch(
-            "http://localhost:8083/api/v1/user/login",
+            `http://${host}:${backendPort}/api/v1/user/login`,
             {
                 method: "POST",
                 headers: {
@@ -1040,9 +1043,9 @@ async function loginUser() {
             localStorage.setItem("role", data.isAdmin);
 
             if (data.isAdmin === true) {
-                window.location.href = "http://localhost:5500/goods_admin.html";
+                window.location.href = `http://${host}:${frontPort}/goods_admin.html`;
             } else {
-                window.location.href = "http://localhost:5500/goods_user.html";
+                window.location.href = `http://${host}:${frontPort}/goods_admin.html`;
             }
         } else {
             console.error("Failed to login:", response.statusText);
