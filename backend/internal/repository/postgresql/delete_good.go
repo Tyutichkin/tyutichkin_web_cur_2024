@@ -8,10 +8,10 @@ import (
 func (r *Repository) DeleteGoodByID(ctx context.Context, good models.Good) (err error) {
 	var query = `
 		DELETE FROM public.goods_stock
-		WHERE goods_id = ?;
-
+		WHERE goods_id = $1;
+	
 		DELETE FROM public.goods
-		WHERE id = ?;
+		WHERE id = $2;
 	`
 	_, err = r.db.Exec(query, good.ID, good.ID)
 	if err != nil {

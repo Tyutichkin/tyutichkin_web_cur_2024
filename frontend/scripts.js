@@ -1040,9 +1040,9 @@ async function loginUser() {
             localStorage.setItem("role", data.isAdmin);
 
             if (data.isAdmin === true) {
-                window.location.href = "http://127.0.0.1:5500/goods_admin.html";
+                window.location.href = "http://localhost:5500/goods_admin.html";
             } else {
-                window.location.href = "http://127.0.0.1:5500/goods_user.html";
+                window.location.href = "http://localhost:5500/goods_user.html";
             }
         } else {
             console.error("Failed to login:", response.statusText);
