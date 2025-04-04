@@ -1,4 +1,4 @@
-FROM golang:1.23-alpine AS builder
+FROM golang:1.22-alpine AS builder
 
 RUN apk --no-cache add bash git make gcc gettext musl-dev curl postgresql-client
 
