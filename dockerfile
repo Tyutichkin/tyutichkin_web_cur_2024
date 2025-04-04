@@ -25,11 +25,11 @@ RUN chmod +x /app/migrate_and_run.sh
 ENTRYPOINT ["/app/migrate_and_run.sh"]
 EXPOSE 8083
 
-FROM alpine:3.18
+FROM alpine:3.20
 
 RUN apk --no-cache add \
-    git=~2.40.4-r0 \
-    bash=~5.2.15-r5 \
+    git=~2.45.3-r0 \
+    bash=~5.2.26-r0 \
     curl=~8.12.1-r0 \
     postgresql15-client=~15.11-r0
 
