@@ -103,7 +103,7 @@ func connectDatabase() (*sql.DB, error) {
 	// Подключение через переменные окружения
 	dbURL := os.Getenv("DATABASE_URL")
 	if dbURL == "" {
-		return nil, fmt.Errorf("failed to get DATABASE_URL environment variable")
+		dbURL = "postgres://postgres:password@db:5432/mydb?sslmode=disable"
 	}
 
 	db, err := sql.Open("postgres", dbURL)
