@@ -27,10 +27,10 @@ func (r *Repository) SearchGoods(ctx context.Context, searchRequest models.Searc
 	`
 	orderPriceStr := ""
 	orderCountStr := ""
-	if searchRequest.IsCountDesc == true {
+	if searchRequest.IsCountDesc {
 		orderCountStr = "DESC"
 	}
-	if searchRequest.IsPriceDesc == true {
+	if searchRequest.IsPriceDesc {
 		orderPriceStr = "DESC"
 	}
 	query = fmt.Sprintf("%v\nORDER BY price %v, gs.goods_count %v", query, orderPriceStr, orderCountStr)

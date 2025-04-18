@@ -33,12 +33,12 @@ func main() {
 
 	router, err := initApi(svc)
 	if err != nil {
-		panic(fmt.Sprintf("initApi error: %s", err))
+		panic(fmt.Sprintf("initApi error: %v", err))
 	}
 
 	err = router.Run(host)
 	if err != nil {
-		panic(fmt.Sprintf("GIN router run err: %s", err))
+		panic(fmt.Sprintf("GIN router run err: %v", err))
 	}
 }
 

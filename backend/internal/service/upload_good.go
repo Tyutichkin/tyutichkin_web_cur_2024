@@ -3,7 +3,9 @@ package service
 import (
 	"encoding/json"
 	"github.com/gin-gonic/gin"
+	"log/slog"
 	"main/internal/models"
+	"mime/multipart"
 	"net/http"
 )
 
@@ -20,7 +22,12 @@ func (s *Service) UploadGood(c *gin.Context) {
 	}
 
 	f, err := file.Open()
-	defer f.Close()
+	defer func(f multipart.File) {
+		err := f.Close()
+		if err != nil {
+			slog.Error("error closing multipart file", err)
+		}
+	}(f)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

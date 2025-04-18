@@ -2,12 +2,19 @@ package postgresql
 
 import (
 	"context"
+	"database/sql"
+	"log/slog"
 	"main/internal/models"
 )
 
 func (r *Repository) GetAllGoods(ctx context.Context) (goods []models.Good, err error) {
 	tx, err := r.db.BeginTx(ctx, nil)
-	defer tx.Rollback()
+	defer func(tx *sql.Tx) {
+		err := tx.Rollback()
+		if err != nil {
+			slog.Error("failed to rollback transaction", err)
+		}
+	}(tx)
 	if err != nil {
 		return nil, err
 	}
@@ -25,7 +32,12 @@ func (r *Repository) GetAllGoods(ctx context.Context) (goods []models.Good, err 
 		ORDER BY price, gs.goods_count
 	`
 	rows, err := tx.Query(query)
-	defer rows.Close()
+	defer func(rows *sql.Rows) {
+		err := rows.Close()
+		if err != nil {
+			slog.Error("failed to close rows:", err)
+		}
+	}(rows)
 	if err != nil {
 		return []models.Good{}, err
 	}

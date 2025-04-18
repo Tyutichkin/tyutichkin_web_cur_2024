@@ -2,12 +2,19 @@ package postgresql
 
 import (
 	"context"
+	"database/sql"
+	"log/slog"
 	"main/internal/models"
 )
 
 func (r *Repository) GetAllUsers(ctx context.Context) (users []models.User, err error) {
 	tx, err := r.db.BeginTx(ctx, nil)
-	defer tx.Rollback()
+	defer func(tx *sql.Tx) {
+		err := tx.Rollback()
+		if err != nil {
+			slog.Error("failed to rollback transaction", "err", err)
+		}
+	}(tx)
 	if err != nil {
 		return nil, err
 	}
@@ -21,7 +28,12 @@ func (r *Repository) GetAllUsers(ctx context.Context) (users []models.User, err 
 		ORDER BY id;
 	`
 	rows, err := tx.Query(query)
-	defer rows.Close()
+	defer func(rows *sql.Rows) {
+		err := rows.Close()
+		if err != nil {
+			slog.Error("failed to close rows", "err", err)
+		}
+	}(rows)
 	if err != nil {
 		return nil, err
 	}
