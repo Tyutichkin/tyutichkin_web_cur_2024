@@ -3,7 +3,7 @@ package postgresql
 import (
 	"context"
 	"database/sql"
-	"log/slog"
+	"log"
 	"main/internal/models"
 )
 
@@ -12,7 +12,7 @@ func (r *Repository) GetAllGoods(ctx context.Context) (goods []models.Good, err 
 	defer func(tx *sql.Tx) {
 		err := tx.Rollback()
 		if err != nil {
-			slog.Error("failed to rollback transaction", err)
+			log.Print("failed to rollback transaction", err)
 		}
 	}(tx)
 	if err != nil {
@@ -35,7 +35,7 @@ func (r *Repository) GetAllGoods(ctx context.Context) (goods []models.Good, err 
 	defer func(rows *sql.Rows) {
 		err := rows.Close()
 		if err != nil {
-			slog.Error("failed to close rows:", err)
+			log.Print("failed to close rows:", err)
 		}
 	}(rows)
 	if err != nil {

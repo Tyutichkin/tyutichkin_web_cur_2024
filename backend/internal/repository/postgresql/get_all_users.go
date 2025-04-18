@@ -3,7 +3,7 @@ package postgresql
 import (
 	"context"
 	"database/sql"
-	"log/slog"
+	"log"
 	"main/internal/models"
 )
 
@@ -12,7 +12,7 @@ func (r *Repository) GetAllUsers(ctx context.Context) (users []models.User, err 
 	defer func(tx *sql.Tx) {
 		err := tx.Rollback()
 		if err != nil {
-			slog.Error("failed to rollback transaction", "err", err)
+			log.Print("failed to rollback transaction", "err", err)
 		}
 	}(tx)
 	if err != nil {
@@ -31,7 +31,7 @@ func (r *Repository) GetAllUsers(ctx context.Context) (users []models.User, err 
 	defer func(rows *sql.Rows) {
 		err := rows.Close()
 		if err != nil {
-			slog.Error("failed to close rows", "err", err)
+			log.Print("failed to close rows", "err", err)
 		}
 	}(rows)
 	if err != nil {
