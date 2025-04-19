@@ -52,7 +52,7 @@ func main() {
 		}
 	}(DB)
 	if err != nil {
-		panic(fmt.Sprintf("initDatabase err: %v", err))
+		panic(fmt.Sprintf("initDatabase err: %w", err))
 	}
 	repo := postgresql.NewRepository(DB)
 	svc := service.NewService(repo)
