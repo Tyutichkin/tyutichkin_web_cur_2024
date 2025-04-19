@@ -6,6 +6,8 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	_ "github.com/lib/pq"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"main/internal/middleware"
 	"main/internal/repository/postgresql"
 	"main/internal/service"
@@ -16,7 +18,31 @@ import (
 var (
 	host = ":8083"
 	DB   *sql.DB
+
+	// Define Prometheus metrics
+	httpRequestsTotal = prometheus.NewCounterVec(
+		prometheus.CounterOpts{
+			Name: "http_requests_total",
+			Help: "Total number of HTTP requests processed.",
+		},
+		[]string{"method", "endpoint", "status"},
+	)
+
+	httpDurationHistogram = prometheus.NewHistogramVec(
+		prometheus.HistogramOpts{
+			Name:    "http_duration_seconds",
+			Help:    "Histogram of HTTP request durations.",
+			Buckets: prometheus.DefBuckets,
+		},
+		[]string{"method", "endpoint"},
+	)
 )
+
+func init() {
+	// Register Prometheus metrics
+	prometheus.MustRegister(httpRequestsTotal)
+	prometheus.MustRegister(httpDurationHistogram)
+}
 
 func main() {
 	err := initDatabase()
@@ -45,6 +71,12 @@ func main() {
 // API V1
 func initApi(svc *service.Service) (router *gin.Engine, err error) {
 	router = gin.Default()
+
+	// Register the Prometheus metrics middleware
+	router.Use(MetricsMiddleware())
+
+	// Prometheus metrics endpoint
+	router.GET("/metrics", gin.WrapH(promhttp.Handler()))
 	config := cors.Config{
 		AllowAllOrigins:  true, // Allow all origins
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
@@ -88,6 +120,25 @@ func initApi(svc *service.Service) (router *gin.Engine, err error) {
 	}
 
 	return router, nil
+}
+
+// Middleware to measure HTTP requests and durations
+func MetricsMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		start := time.Now()
+		c.Next()
+
+		duration := time.Since(start).Seconds()
+		statusCode := c.Writer.Status()
+		method := c.Request.Method
+		endpoint := c.FullPath()
+
+		// Update the request counter
+		httpRequestsTotal.WithLabelValues(method, endpoint, fmt.Sprintf("%d", statusCode)).Inc()
+
+		// Update the histogram with the request duration
+		httpDurationHistogram.WithLabelValues(method, endpoint).Observe(duration)
+	}
 }
 
 func initDatabase() error {
