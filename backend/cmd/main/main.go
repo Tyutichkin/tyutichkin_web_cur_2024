@@ -86,7 +86,7 @@ func initApi(svc *service.Service) (router *gin.Engine, err error) {
 		AllowCredentials: true,
 		MaxAge:           12 * time.Hour,
 	}
-	router.Use(cors.New(config))
+	//router.Use(cors.New(config))
 
 	v1 := router.Group("/api/v1")
 	{
@@ -119,6 +119,7 @@ func initApi(svc *service.Service) (router *gin.Engine, err error) {
 		v1.POST("good/upload", svc.UploadGood)
 		v1.GET("good/download/:id", svc.DownloadGood)
 	}
+	v1.Use(cors.New(config))
 
 	return router, nil
 }
