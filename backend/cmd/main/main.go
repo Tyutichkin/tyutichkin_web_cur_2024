@@ -62,19 +62,30 @@ func main() {
 		panic(fmt.Sprintf("initApi error: %v", err))
 	}
 
-	// Prometheus metrics endpoint
-	router.GET("/metrics", gin.WrapH(promhttp.Handler()))
-
 	err = router.Run(host)
 	if err != nil {
 		panic(fmt.Sprintf("GIN router run err: %v", err))
 	}
 }
 
+func prometheusHandler() gin.HandlerFunc {
+	h := promhttp.Handler()
+
+	return func(c *gin.Context) {
+		h.ServeHTTP(c.Writer, c.Request)
+	}
+}
+
 // API V1
 func initApi(svc *service.Service) (router *gin.Engine, err error) {
-	fmt.Println(">>> initApi: started")
 	router = gin.Default()
+
+	// Prometheus metrics endpoint
+	router.GET("/metrics", prometheusHandler())
+
+	// Register the Prometheus metrics middleware
+	router.Use(MetricsMiddleware())
+
 	config := cors.Config{
 		AllowAllOrigins:  true, // Allow all origins
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
@@ -84,11 +95,6 @@ func initApi(svc *service.Service) (router *gin.Engine, err error) {
 		MaxAge:           12 * time.Hour,
 	}
 	router.Use(cors.New(config))
-
-	fmt.Println(">>> Registering /metrics route")
-
-	// Register the Prometheus metrics middleware
-	router.Use(MetricsMiddleware())
 
 	v1 := router.Group("/api/v1")
 	{
