@@ -72,11 +72,12 @@ func main() {
 func initApi(svc *service.Service) (router *gin.Engine, err error) {
 	router = gin.Default()
 
+	// Prometheus metrics endpoint
+	router.GET("/metrics", gin.WrapH(promhttp.Handler()))
+
 	// Register the Prometheus metrics middleware
 	router.Use(MetricsMiddleware())
 
-	// Prometheus metrics endpoint
-	router.GET("/metrics", gin.WrapH(promhttp.Handler()))
 	config := cors.Config{
 		AllowAllOrigins:  true, // Allow all origins
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
