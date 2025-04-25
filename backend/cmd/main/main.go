@@ -71,13 +71,6 @@ func main() {
 // API V1
 func initApi(svc *service.Service) (router *gin.Engine, err error) {
 	router = gin.Default()
-
-	// Prometheus metrics endpoint
-	router.GET("/metrics", gin.WrapH(promhttp.Handler()))
-
-	// Register the Prometheus metrics middleware
-	router.Use(MetricsMiddleware())
-
 	config := cors.Config{
 		AllowAllOrigins:  true, // Allow all origins
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
@@ -86,7 +79,13 @@ func initApi(svc *service.Service) (router *gin.Engine, err error) {
 		AllowCredentials: true,
 		MaxAge:           12 * time.Hour,
 	}
-	//router.Use(cors.New(config))
+	router.Use(cors.New(config))
+
+	// Prometheus metrics endpoint
+	router.GET("/metrics", gin.WrapH(promhttp.Handler()))
+
+	// Register the Prometheus metrics middleware
+	router.Use(MetricsMiddleware())
 
 	v1 := router.Group("/api/v1")
 	{
@@ -119,7 +118,6 @@ func initApi(svc *service.Service) (router *gin.Engine, err error) {
 		v1.POST("good/upload", svc.UploadGood)
 		v1.GET("good/download/:id", svc.DownloadGood)
 	}
-	v1.Use(cors.New(config))
 
 	return router, nil
 }
